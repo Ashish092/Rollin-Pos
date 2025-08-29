@@ -17,16 +17,26 @@ export default function AuthGuard({ children }: AuthGuardProps) {
 		let mounted = true
 
 		const init = async () => {
-			const { data } = await supabase.auth.getSession()
-			if (!mounted) return
-			if (!data.session) {
+			try {
+				const { data } = await supabase.auth.getSession()
+				if (!mounted) return
+				
+				if (!data.session) {
+					setIsAuthed(false)
+					setIsLoading(false)
+					router.replace('/login')
+					return
+				}
+				
+				setIsAuthed(true)
+				setIsLoading(false)
+			} catch (error) {
+				console.error('Auth check failed:', error)
+				if (!mounted) return
 				setIsAuthed(false)
 				setIsLoading(false)
 				router.replace('/login')
-				return
 			}
-			setIsAuthed(true)
-			setIsLoading(false)
 		}
 
 		init()
@@ -55,7 +65,16 @@ export default function AuthGuard({ children }: AuthGuardProps) {
 		)
 	}
 
-	if (!isAuthed) return null
+	if (!isAuthed) {
+		return (
+			<div className="min-h-screen flex items-center justify-center">
+				<div className="text-center">
+					<div className="h-6 w-6 animate-spin rounded-full border-2 border-blue-600 border-t-transparent mx-auto mb-4" />
+					<p className="text-gray-600">Redirecting to login...</p>
+				</div>
+			</div>
+		)
+	}
 
 	return <>{children}</>
 }
