@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
-import { Eye, EyeOff, AlertCircle, CheckCircle, Wifi, WifiOff } from 'lucide-react'
+import { Eye, EyeOff, AlertCircle, CheckCircle, WifiOff } from 'lucide-react'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -12,7 +12,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [connectionStatus, setConnectionStatus] = useState<'checking' | 'connected' | 'disconnected'>('checking')
-  const [debugInfo, setDebugInfo] = useState<any>(null)
+  const [debugInfo, setDebugInfo] = useState<{ error: string; code?: string; details?: string; hint?: string } | null>(null)
   const router = useRouter()
 
   // Check connection status
@@ -20,7 +20,7 @@ export default function LoginPage() {
     const checkConnection = async () => {
       try {
         // Test Supabase connection
-        const { data, error } = await supabase.from('stores').select('count').limit(1)
+        const { error } = await supabase.from('stores').select('count').limit(1)
         
         if (error) {
           console.error('Supabase connection error:', error)
