@@ -131,7 +131,9 @@ export default function LoginPage() {
         }
       } else if (data.user) {
         console.log('Login successful, user:', data.user.email)
-        router.push('/dashboard')
+        console.log('Redirecting to dashboard...')
+        // Use window.location for immediate redirect
+        window.location.href = '/dashboard'
       } else {
         setError('Login failed. No user data received.')
       }

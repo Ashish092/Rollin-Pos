@@ -1,6 +1,5 @@
 'use client'
 import DashboardLayout from '@/components/DashboardLayout'
-import AuthGuard from '@/components/AuthGuard'
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -43,8 +42,7 @@ export default function DashboardPage() {
   const formatAmount = (amount: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount)
 
   return (
-    <AuthGuard>
-      <DashboardLayout>
+    <DashboardLayout>
         <div className="space-y-6">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
@@ -75,6 +73,5 @@ export default function DashboardPage() {
           <Plus className="w-6 h-6" />
         </Link>
       </DashboardLayout>
-    </AuthGuard>
   )
 }
